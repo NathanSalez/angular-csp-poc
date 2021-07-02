@@ -1,0 +1,22 @@
+<div class="example-container">
+  <button (click)="randomPokemon()" mat-button>RANDOM POKEMON</button>
+  <ng-container *ngIf="isLoggedIn(); else notConnected">
+  <button (click)="randomTeam()" mat-button>RANDOM TEAM</button>
+    <button [routerLink]="['/team']" mat-button>MA TEAM</button>
+    <button (click)="logout()" [routerLink]="['/pokedex']" mat-button>DECONNEXION</button>
+  </ng-container>
+  <ng-template #notConnected>
+    <button *ngIf="!isLoggedIn()" [routerLink]="['/login']" mat-button>CONNEXION</button>
+  </ng-template>
+
+  <mat-drawer-container class="example-container" autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+      <app-pokemon-list [searchOption]="true" (selectedPokemon)="onSelectedPokemon($event)"></app-pokemon-list>
+    </mat-drawer>
+
+    <div class="example-sidenav-content">
+      <app-pokemon-detail (onAdd)="addPokToTeam($event)" [isAddable]="true" [cols]="2" [rowHeight]="'100px'" [selectedPokemonId]="selectedId"
+                          [showDescription]="true"></app-pokemon-detail>
+    </div>
+  </mat-drawer-container>
+</div>

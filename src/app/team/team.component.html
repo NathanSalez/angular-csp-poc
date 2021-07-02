@@ -1,0 +1,18 @@
+<button [routerLink]="['/pokedex']" mat-button>Back to POKEMONS</button>
+<ng-container *ngIf="(team |async) as teamPok">
+  <mat-drawer-container *ngIf="teamPok.length > 0; else teamVide" class="example-container" autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+      <app-pokemon-list [(pokemonsOption)]="pokemonsToDelete" (pokemonsOptionChange)="checkToggle()"></app-pokemon-list>
+      <div style="text-align: center">
+        <button mat-raised-button color="accent" (click)="submitDelete(teamPok)">Valider</button>
+      </div>
+    </mat-drawer>
+    <app-pokemon-detail *ngFor="let pok of teamPok" [cols]="2" [rowHeight]="'100px'" [isRemovable]="true"
+                        [selectedPokemonId]="pok.id"
+                        (onDelete)="placeToDelete($event)"></app-pokemon-detail>
+  </mat-drawer-container>
+</ng-container>
+<ng-template #teamVide>
+  <p>Votre équipe est vide !</p>
+</ng-template>
+

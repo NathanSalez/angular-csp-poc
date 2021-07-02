@@ -1,0 +1,60 @@
+<!--<button [routerLink]="['/pokemons']" mat-button>Back to POKEMONS</button>-->
+<mat-card class="pokemon-card" *ngIf="(pokemon$|async) as pok">
+  <mat-grid-list cols="{{cols}}" rowHeight="{{rowHeight}}">
+    <mat-grid-tile [colspan]="1" [rowspan]="2">
+      <div style="text-align: center">
+        <img *ngIf="!showDescription; else otherImg" class="shake"
+             mat-card-lg-image src="assets/img/official-artwork/{{pok.id}}.png"
+             alt="{{pok.name}}"
+             matTooltip="{{pok.description}}"
+             [matTooltipPosition]="'after'">
+        <ng-template #otherImg>
+          <img class="shake"
+               mat-card-lg-image src="assets/img/official-artwork/{{pok.id}}.png"
+               alt="{{pok.name}}"
+               matTooltip="{{pok.description}}"
+               [matTooltipPosition]="'after'">
+        </ng-template>
+        <div> No. {{pok.id | number:'3.0'}}</div>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="2">
+      <mat-card-header>
+        <mat-list role="list">
+          <mat-list-item role="listitem">
+            <mat-card-title>{{pok.name}}
+              <mat-icon style="cursor: pointer; vertical-align: center" (click)="audioOption.play()" color="secondary"
+                        mat-list-icon>play_circle
+              </mat-icon>
+            </mat-card-title>
+            <audio #audioOption autoplay>
+              <source src="assets/audio/{{pok.id}}.mp3" type="audio/mp3">
+            </audio>
+          </mat-list-item>
+          <mat-list-item role="listitem">
+            <mat-chip-list>
+              <mat-chip *ngFor="let type of pok.types" selected [color]=" type | color"> {{type}} </mat-chip>
+            </mat-chip-list>
+          </mat-list-item>
+          <mat-list-item role="listitem">
+            Taille : {{pok.height | number:'1.1-1'}} m
+          </mat-list-item>
+          <mat-list-item role="listitem">
+            Poids : {{pok.weight | number:'1.1-1'}} kg
+          </mat-list-item>
+        </mat-list>
+      </mat-card-header>
+    </mat-grid-tile>
+    <mat-grid-tile *ngIf="showDescription" [colspan]="cols" [rowspan]="1">
+      <div style="text-align: center">
+        {{pok.description}}
+      </div>
+    </mat-grid-tile>
+    <button *ngIf="isRemovable" mat-mini-fab color="warn" aria-label="Remove PokemonModel" (click)="emitDelete(pok)">
+      <mat-icon>remove</mat-icon>
+    </button>
+    <button *ngIf="isAddable && isLoggedIn()" mat-mini-fab color="accent" aria-label="Remove PokemonModel" (click)="emitAdd(pok)">
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-grid-list>
+</mat-card>
